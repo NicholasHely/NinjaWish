@@ -15,7 +15,14 @@ physics.start(); physics.pause()
 
 -- forward declarations and other locals
 local screenW, screenH, halfW = display.contentWidth, display.contentHeight, display.contentWidth*0.5
+
+
+local Balloon = require ( "balloon" )
+local Shuriken = require( "shuriken" ) 
 local shuriken
+
+local balloons = {}
+
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
 -- 
@@ -32,6 +39,17 @@ function scene:createScene( event )
 	local background = display.newRect( 0, 0, screenW, screenH )
 	background:setFillColor( 128 )
 	
+	Shuriken.group = display.newGroup( )
+	Shuriken.screen = { height = screenH, width = screenW }
+	Shuriken.physics = physics
+
+	shuriken = Shuriken:new( {type = "somethinb"} )
+	
+	Balloon.group = display.newGroup( )
+	Balloon.physics = physics
+
+	balloons[1] = Balloon:new( { type = green } )
+
 	-- make a crate (off-screen), position it, and rotate slightly
 	-- local crate = display.newImageRect( "crate.png", 90, 90 )
 	-- crate.x, crate.y = 160, -100
@@ -49,55 +67,48 @@ function scene:createScene( event )
 	-- local grassShape = { -halfW,-34, halfW,-34, halfW,34, -halfW,34 }
 	-- physics.addBody( grass, "static", { friction=0.3, shape=grassShape } )
 	
-	shuriken = display.newImageRect("grass.png", 50, 50)
-	physics.addBody(shuriken, "dynamic", { friction = 0.3, density = 1, bounce = 0.3} )
-	shuriken.x = 50
-	shuriken.y = 50
-	shuriken.halfW = shuriken.width / 2
-	shuriken.halfH = shuriken.height / 2
-	shuriken.gravityScale = 0
 	
 	
 	-- all display objects must be inserted into group
 	group:insert( background )
+	group:insert( Balloon.group ) 
+	group:insert( Shuriken.group )
 	-- group:insert( grass)
 	-- group:insert( crate )
-	group:insert( shuriken )
+	--group:insert( shuriken )
 end
 
-local function updateShuriken()
-	
-	shuriken.top = shuriken.y - shuriken.halfH
-	shuriken.right = shuriken.x + shuriken.halfW
-	shuriken.bottom = shuriken.y + shuriken.halfH
-	shuriken.left = shuriken.x - shuriken.halfW
-	
-	print(shuriken.top)
-	print("updare")
-	
-	
-	if ( shuriken.top > screenH ) then
-		shuriken.y = 0
-	elseif ( shuriken.bottom < 0 ) then
-		shuriken.y = screenH
-	end
-	
-	if ( shuriken.left > screenW ) then
-		shuriken.x = 0
-	elseif ( shuriken.right < 0 ) then
-		shuriken.x = screenW
-	end
-end
 
-local function update (event)
+
+local function update ( event )
 	
 	--updateShuriken();
-	shuriken:setLinearVelocity(20, 20)
-	updateShuriken( )
+	-- shuriken:setLinearVelocity(20, 20)
+	--updateShuriken( )
+	shuriken:update( )
+
+	-- update all the balloons
+	for k, balloon in pairs(balloons) do
+		balloon:update( )
+		-- remove the balloon from the list if it
+		-- is finished
+		if (balloon.isFinalised == true) then
+			balloons[k] = nil
+		end
+	end
 	--shuriken:applyTorque( 2 )
 end
 
 Runtime:addEventListener( "enterFrame", update )
+
+-- local function handleCollision ( event )
+
+-- 	print (event.object1.parentClass.class)
+
+-- 	print ("collision")
+-- end
+
+-- Runtime:addEventListener( "collision", handleCollision )
 
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
@@ -122,6 +133,19 @@ function scene:destroyScene( event )
 	package.loaded[physics] = nil
 	physics = nil
 end
+
+-- Called when a key event has been received.
+local function onKeyEvent( event )
+    -- Print which key was pressed down/up to the log.
+    local message = "Key '" .. event.keyName .. "' was pressed " .. event.phase
+    print( message )
+    shuriken:handleEvent( event )
+    -- If the "back" key was pressed on Android, then prevent it from backing out of your app.
+    
+end
+
+-- Add the key event listener.
+Runtime:addEventListener( "key", onKeyEvent );
 
 -----------------------------------------------------------------------------------------
 -- END OF YOUR IMPLEMENTATION
