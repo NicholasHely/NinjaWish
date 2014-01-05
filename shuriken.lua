@@ -7,16 +7,18 @@ local function onLocalCollision( self, event )
 
 	print("test collision")
 
-	local class = event.other.parentClass
+	local hitClass = event.other.parentClass
 
-	if (class == nil) then
+	if (hitClass == nil) then
 		return true
 	end
 
-	if (event.phase == "began" and class.className == "balloon") then
+	if (event.phase == "began" and hitClass.className == "balloon") then
 		-- local vx, vy = self:getLinearVelocity( )
 		-- self:setLinearVelocity( vx, vy )
-		print (class:kill());
+		
+		Shuriken.player:hitBalloon(self.parentClass, hitClass)
+		-- class:kill()
 		-- class:kill()
 
 	end
@@ -32,7 +34,7 @@ function Shuriken:new( shurikenInfo )
 	shuriken.display = display.newImageRect("grass.png", 50, 50)
 	shuriken.display.parentClass = shuriken
 
-	Shuriken.physics.addBody(shuriken.display, "dynamic", { friction = 0.3, density = 1, bounce = 0.5} )
+	physics.addBody(shuriken.display, "dynamic", { friction = 0.3, density = 1, bounce = 0.5} )
 	
 	shuriken.display.x = 50
 	shuriken.display.y = 50

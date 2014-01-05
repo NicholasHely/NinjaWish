@@ -19,9 +19,15 @@ local screenW, screenH, halfW = display.contentWidth, display.contentHeight, dis
 
 local Balloon = require ( "balloon" )
 local Shuriken = require( "shuriken" ) 
-local shuriken
+local Player = require ( "player" )
+local Balloons = require ( "balloons" )
 
-local balloons = {}
+local balloons
+
+local shuriken
+local player
+
+local balloonsCount = 0
 
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
@@ -39,16 +45,21 @@ function scene:createScene( event )
 	local background = display.newRect( 0, 0, screenW, screenH )
 	background:setFillColor( 128 )
 	
+	player = Player:new()
+
 	Shuriken.group = display.newGroup( )
 	Shuriken.screen = { height = screenH, width = screenW }
-	Shuriken.physics = physics
+	Shuriken.player = player
 
 	shuriken = Shuriken:new( {type = "somethinb"} )
 	
-	Balloon.group = display.newGroup( )
-	Balloon.physics = physics
 
-	balloons[1] = Balloon:new( { type = green } )
+	-- Balloons.group = display.newGroup( )
+	Balloons.screen = { width = screenW, height = screenH }
+
+	balloons = Balloons:new( )
+
+	-- balloons[1] = Balloon:new( { type = green } )
 
 	-- make a crate (off-screen), position it, and rotate slightly
 	-- local crate = display.newImageRect( "crate.png", 90, 90 )
@@ -71,21 +82,16 @@ function scene:createScene( event )
 	
 	-- all display objects must be inserted into group
 	group:insert( background )
-	group:insert( Balloon.group ) 
+	group:insert( Balloons.group ) 
 	group:insert( Shuriken.group )
 	-- group:insert( grass)
 	-- group:insert( crate )
 	--group:insert( shuriken )
 end
 
+local function updateBalloons()
 
 
-local function update ( event )
-	
-	--updateShuriken();
-	-- shuriken:setLinearVelocity(20, 20)
-	--updateShuriken( )
-	shuriken:update( )
 
 	-- update all the balloons
 	for k, balloon in pairs(balloons) do
@@ -96,6 +102,17 @@ local function update ( event )
 			balloons[k] = nil
 		end
 	end
+end
+
+local function update ( event )
+	
+	--updateShuriken();
+	-- shuriken:setLinearVelocity(20, 20)
+	--updateShuriken( )
+	shuriken:update( )
+	balloons:update( )
+	--updateBalloons( )
+	
 	--shuriken:applyTorque( 2 )
 end
 
