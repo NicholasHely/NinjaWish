@@ -37,7 +37,7 @@ end
 
 function Balloon:update( )
 	
-	print ("updating balloon")
+	-- print ("updating balloon")
 	-- means we want to remove this dead balloon from the field
 	if (self.isAlive == false and self.display ~= nil) then
 		self.isFinalised = true

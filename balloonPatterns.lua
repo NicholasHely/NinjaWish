@@ -1,9 +1,17 @@
 local patterns = {
 	[1] = 
-	{ 
-		
-		{ type = "green", position = { x = "random", y = 0 } }
-	
+	{ 	
+		info = 
+		{
+			width = 2,
+			left = 1,
+			type = "relative",
+		},
+		balloonValues = 
+		{
+			[1] = { type = "green", speed = 1, position = { x = "random", y = 0 } },
+			[2] = { type = "green", speed = 1, position = { x = 1, y = 0 } }
+		}
 	}
 
 }
@@ -11,12 +19,7 @@ local patterns = {
 
 function getPattern( pattern )
 
-	return patters[pattern] or 
-	{ 
-		{ 
-		type = "green", position = { x = "random", y = 0 }
-		}
-	}
+	return patterns[pattern] or patterns[1]
 
 end
 
