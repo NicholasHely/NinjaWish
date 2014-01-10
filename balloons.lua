@@ -2,6 +2,9 @@ require ("balloonPatterns")
 
 local Balloon = require( "Balloon" )
 local Balloons = {}
+
+local Balloons.balloonsAcross = 15
+
 Balloons.group = display.newGroup( )
 Balloon.group = Balloons.group
 
@@ -9,6 +12,7 @@ Balloon.group = Balloons.group
 function Balloons:new( )
 	local balloons = {}
 	balloons.currentBalloons = { }
+	balloons.balloonSize = Balloons.screen.width / Balloons.balloonsAcross
 
 	setmetatable( balloons, self )
 	self.__index = self
@@ -50,17 +54,41 @@ function Balloons:update( )
 
 end
 
+function Balloons:validatePosition( x, left, width)
+
+
+end
+
 function Balloons:createBalloons( pattern )
 
-	local initialX = pattern[1].position.x;
+	local initialX = 0 --pattern[1].position.x;
 	
 	
+	local positionType = pattern.info.type
+
+	if (positionType == "relative") then
+		local width = pattern.info.width
+
+		local leftMostBalloon = pattern.info.left
+
+		local lastAvailablePosition = Balloon.screen.width - (self.balloonSize * width)
+
+		
+
+		-- gives me a random screen position
+		initialX = math.random( ) * Balloons.screen.width
+
+	elseif (positionType == "fixed") then
+
+	end
+
+
 	for k, balloonValues in pairs (pattern) do
 		
 		local balloonType = balloonValues.type
 		local balloonPosition = balloonValues.position
 
-		local balloonX, balloonY = 0, Ballons.screen.height
+		local balloonX, balloonY = 0, Balloons.screen.height
 
 		if (balloonPosition.type == "fixed") then
 			balloonX = balloonPosition.x * Balloons.screen.width
