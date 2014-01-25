@@ -5,16 +5,18 @@ local patterns = {
 		{
 			width = 2,
 			left = 1,
-			type = "relative",
+			--type = "relative",
 		},
 		balloonValues = 
 		{
-			[1] = { type = "green", speed = 1, position = { x = "random", y = 0 } },
-			[2] = { type = "green", speed = 1, position = { x = 1, y = 0 } }
+			[1] = { type = "green", speed = 1, position = { type = "random", x = nil, y = 0 } },
+			[2] = { type = "green", speed = 1, position = { type = "relative", x = 1, y = 0 } }
 		}
 	}
 
 }
+
+
 
 
 function getPattern( pattern )

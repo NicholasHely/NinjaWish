@@ -18,12 +18,18 @@ end
 function Player:hitBalloon( shuriken, balloon )
 
 	if ( balloon.type == "green" ) then
-		player.score = player.score + 5
+		self.score = self.score + 5
+	elseif ( balloon.type == "red" ) then
+		self:loseLife ( )
 	end
 	
 	balloon:kill()
 	
-	print ( player.score )
+	print ( self.score )
+end
+
+function Player:loseLife()
+	self.lives = self.lives - 1
 end
 
 return Player

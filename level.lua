@@ -55,7 +55,7 @@ function scene:createScene( event )
 	
 
 	-- Balloons.group = display.newGroup( )
-	Balloons.screen = { width = screenW, height = screenH }
+	-- Balloons.screen = { width = screenW, height = screenH }
 
 	balloons = Balloons:new( )
 
