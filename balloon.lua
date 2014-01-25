@@ -5,14 +5,16 @@ function Balloon:new( balloonInfo )
 	
 	--TODO: different image based off type
 	--TODO: change image to sprites to allow animation on balloons
-	balloon.display = display.newImageRect( "crate.png", 50, 50 )
-	balloon.display.x = 500
-	balloon.display.y = 500
 	balloon.className =  "balloon"
-	balloon.type = "green"
+	balloon.type = balloonInfo.type
+
+	balloon.display = display.newImageRect( "crate.png", 50, 50 )
+	balloon.display.x = balloonInfo.position.x
+	balloon.display.y = balloonInfo.position.y
+	
 	
 	-- 0 density so that the shuriken does not slow down when it hits the balloon
-	physics.addBody( balloon.display, "dynamic", { density = 0, friction=.2, bounce=.5  } )
+	physics.addBody( balloon.display, "dynamic", { density = 0, friction=0, bounce = 0, filter={1} } )
 
 	balloon.display.gravityScale = 0
 	balloon.display.parentClass = balloon
@@ -22,6 +24,9 @@ function Balloon:new( balloonInfo )
 	balloon.isAlive = true
 	balloon.isFinalised = false
 
+	--balloon.display:applyForce( 0, -.02, balloon.display.x, balloon.display.y)
+	balloon.display:applyLinearImpulse( 0, -.02, balloon.display.x, balloon.display.y )
+
 	setmetatable( balloon, self )
 	self.__index = self
 
@@ -29,7 +34,8 @@ function Balloon:new( balloonInfo )
 end
 
 function Balloon:kill( )
-
+	--self.display.isBody = false
+	self.display.isSensor = true
 	self.isAlive = false;
 	print ("balloon killed")
 end
@@ -44,10 +50,7 @@ function Balloon:update( )
 		self.display:removeSelf( )
 		self.display.parentClass = nil
 		self.display = nil
-		
-
 	end
-
 
 end
 

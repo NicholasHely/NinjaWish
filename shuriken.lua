@@ -34,7 +34,7 @@ function Shuriken:new( shurikenInfo )
 	shuriken.display = display.newImageRect("grass.png", 50, 50)
 	shuriken.display.parentClass = shuriken
 
-	physics.addBody(shuriken.display, "dynamic", { friction = 0.3, density = 1, bounce = 0.5} )
+	physics.addBody(shuriken.display, "dynamic", { friction = 0.3, density = 1, bounce = 0.0} )
 	
 	shuriken.display.x = 50
 	shuriken.display.y = 50
