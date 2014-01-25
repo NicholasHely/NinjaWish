@@ -79,7 +79,7 @@ function Balloons:createBalloons( pattern )
 		initialX = math.random( ) * Balloons.screen.width
 
 	elseif (positionType == "fixed") then
-
+		
 	end
 
 
