@@ -74,7 +74,7 @@ function Balloons:createBalloons( pattern )
 	--if (positionType == "relative") then
 
 		--local initialX = 0
-		
+
 
 	-- initialX = math.random( )
 		
@@ -82,6 +82,8 @@ function Balloons:createBalloons( pattern )
 	local width = pattern.info.width
 
 	local leftMostBalloon = pattern.balloonValues[pattern.info.left]
+
+
 
 	local lastAvailablePosition = Balloons.screen.width - (self.balloonSize * width)
 
@@ -98,11 +100,6 @@ function Balloons:createBalloons( pattern )
 
 	
 	-- print ("Initial X: " .. initialX)
-
-	-- elseif (positionType == "fixed") then
--- 
-	--end
-
 
 	for k, balloonValues in pairs (pattern.balloonValues) do
 		
