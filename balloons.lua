@@ -75,15 +75,14 @@ function Balloons:createBalloons( pattern )
 
 		--local initialX = 0
 
-
 	-- initialX = math.random( )
-		
+
+
 
 	local width = pattern.info.width
 
 	local leftMostBalloon = pattern.balloonValues[pattern.info.left]
-
-
+		
 
 	local lastAvailablePosition = Balloons.screen.width - (self.balloonSize * width)
 
