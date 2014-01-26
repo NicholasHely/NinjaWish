@@ -1,7 +1,12 @@
 
 
 local Shuriken = {}
+Shuriken.group = display.newGroup( )
+Shuriken.screen = { height = display.contentHeight, width = display.contentWidth }
+Shuriken.maxYSpeed = Shuriken.screen.height / 20
+Shuriken.maxXSpeed = Shuriken.screen.width / 20
 
+local DeltaTime = require("deltaTime");
 
 local function onLocalCollision( self, event )
 
@@ -17,7 +22,7 @@ local function onLocalCollision( self, event )
 		-- local vx, vy = self:getLinearVelocity( )
 		-- self:setLinearVelocity( vx, vy )
 		
-		Shuriken.player:hitBalloon(self.parentClass, hitClass)
+		self.parentClass.player:hitBalloon(self.parentClass, hitClass)
 		-- class:kill()
 		-- class:kill()
 
@@ -28,8 +33,11 @@ end
 
 function Shuriken:new( shurikenInfo )
 	shuriken = {}
-	
+	print ("play")
+	print (shurikenInfo.player)
+	shuriken.player = shurikenInfo.player
 	shuriken.className = "shuriken"
+	shuriken.acceleration = { x = 0, y = 0 }
 
 	shuriken.display = display.newImageRect("grass.png", 50, 50)
 	shuriken.display.parentClass = shuriken
@@ -55,6 +63,17 @@ function Shuriken:new( shurikenInfo )
 	return shuriken
 end
 
+function Shuriken:accelerometerChanged( event )
+	local xAcceleration, yAcceleration = -event.yGravity, -event.xGravity
+
+	
+
+	xAcceleration = xAcceleration * Shuriken.maxXSpeed
+	yAcceleration = yAcceleration * Shuriken.maxYSpeed
+
+	self.acceleration = { x = xAcceleration, y = yAcceleration }
+end
+
 function Shuriken:handleEvent ( event )
 
 	if (event.keyName == "w") then
@@ -78,7 +97,9 @@ function Shuriken:handleEvent ( event )
 end
 
 function Shuriken:update( )
-	
+
+	self.display:translate( self.acceleration.x * DeltaTime.deltaTime, self.acceleration.y * DeltaTime.deltaTime)
+
 	self.display.top = self.display.y - self.display.halfH
 	self.display.right = self.display.x + self.display.halfW
 	self.display.bottom = self.display.y + self.display.halfH

@@ -1,6 +1,6 @@
 require ("balloonPatterns")
 
-local Balloon = require( "Balloon" )
+local Balloon = require( "balloon" )
 local Balloons = {}
 
 Balloons.screen = { width = display.contentWidth, height = display.contentHeight}
@@ -49,6 +49,7 @@ function Balloons:update( )
 	for k, balloon in pairs(self.currentBalloons) do
 		-- print ("we got a balloon")
 		balloon:update( )
+
 		-- remove the balloon from the list if it
 		-- is finished
 		if (balloon.isFinalised == true) then
@@ -116,7 +117,13 @@ function Balloons:createBalloons( pattern )
 			balloonAbsolutePosition = self:getBalloonPosition(initialPosition, 1, balloonPosition)
 		end 
 
-		local balloon = Balloon:new ( { type = balloonType, position = balloonAbsolutePosition })
+		local balloon = Balloon:new ( 
+			{
+			 player = Balloons.player,
+			 type = balloonType, 
+			 size = Balloons.size, 
+			 position = balloonAbsolutePosition 
+			})
 		table.insert( self.currentBalloons, balloon )
 		-- if (balloonPosition.type == "fixed") then
 		-- 	balloonX = balloonPosition.x * Balloons.screen.width
@@ -145,7 +152,7 @@ function Balloons:getBalloonPosition( startingBalloonPosition, width, position )
 	elseif (position.type == "fixed") then
 		initialX = Balloons.screen.width * leftMostBalloon.position.x
 	elseif (position.type == "relative") then
-		initialX = startingBalloonPosition.x + (position.x * Balloons.size * .5)
+		initialX = startingBalloonPosition.x + (position.x * Balloons.size)
 	end
 
 	local rightMost = (Balloons.screen.width - Balloons.size * .5) - (Balloons.size * width)

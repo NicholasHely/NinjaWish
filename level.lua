@@ -17,14 +17,13 @@ physics.start(); physics.pause()
 local screenW, screenH, halfW = display.contentWidth, display.contentHeight, display.contentWidth*0.5
 
 
-local Balloon = require ( "balloon" )
-local Shuriken = require( "shuriken" ) 
 local Player = require ( "player" )
 local Balloons = require ( "balloons" )
 
 local balloons
 
-local shuriken
+local DeltaTime = require("deltaTime");
+
 local player
 
 local balloonsCount = 0
@@ -45,13 +44,17 @@ function scene:createScene( event )
 	local background = display.newRect( 0, 0, screenW, screenH )
 	background:setFillColor( 128 )
 	
+	
+
 	player = Player:new()
 
-	Shuriken.group = display.newGroup( )
-	Shuriken.screen = { height = screenH, width = screenW }
-	Shuriken.player = player
+	Balloons.player = player
 
-	shuriken = Shuriken:new( {type = "somethinb"} )
+	
+	
+	-- Shuriken.player = player
+
+	
 	
 
 	-- Balloons.group = display.newGroup( )
@@ -83,7 +86,7 @@ function scene:createScene( event )
 	-- all display objects must be inserted into group
 	group:insert( background )
 	group:insert( Balloons.group ) 
-	group:insert( Shuriken.group )
+	Player.insertShurikenGroup(group)
 	-- group:insert( grass)
 	-- group:insert( crate )
 	--group:insert( shuriken )
@@ -106,15 +109,36 @@ end
 
 local function update ( event )
 	
+	DeltaTime.updateDeltaTime()
+	print ("DT: " .. DeltaTime.deltaTime)
 	--updateShuriken();
 	-- shuriken:setLinearVelocity(20, 20)
 	--updateShuriken( )
-	shuriken:update( )
+	player:update( )
 	balloons:update( )
 	--updateBalloons( )
 	
 	--shuriken:applyTorque( 2 )
 end
+
+local function accelerometerChanged(event)  
+    player:accelerometerChanged(event)
+end  
+
+Runtime:addEventListener("accelerometer", accelerometerChanged) 
+
+-- Called when a new gyroscope measurement has been received.
+-- local function onGyroscopeDataReceived( event )
+--     -- Calculate approximate rotation traveled via deltaTime.
+--     -- Remember that rotation rate is in radians per second.
+--     local deltaRadians = event.xRotation * event.deltaTime
+--     local deltaDegrees = deltaRadians * (180 / math.pi)
+-- end
+
+-- -- Set up the above function to receive gyroscope events if the sensor exists.
+-- if system.hasEventSource( "gyroscope" ) then
+--     Runtime:addEventListener( "gyroscope", onGyroscopeDataReceived )
+-- end
 
 Runtime:addEventListener( "enterFrame", update )
 

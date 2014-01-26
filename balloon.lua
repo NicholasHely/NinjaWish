@@ -8,10 +8,17 @@ function Balloon:new( balloonInfo )
 	balloon.className =  "balloon"
 	balloon.type = balloonInfo.type
 
-	balloon.display = display.newImageRect( "crate.png", 50, 50 )
+	local image = "crate.png"
+
+	if (balloon.type == "green") then
+		image = "crate.png"
+	end
+
+	balloon.player = balloonInfo.player
+	balloon.display = display.newImageRect( image, balloonInfo.size, balloonInfo.size )
 	balloon.display.x = balloonInfo.position.x
 	balloon.display.y = balloonInfo.position.y
-	
+	balloon.isPastTop = false
 	
 	-- 0 density so that the shuriken does not slow down when it hits the balloon
 	physics.addBody( balloon.display, "dynamic", { density = 0, friction=0, bounce = 0, filter={1} } )
@@ -25,7 +32,7 @@ function Balloon:new( balloonInfo )
 	balloon.isFinalised = false
 
 	--balloon.display:applyForce( 0, -.02, balloon.display.x, balloon.display.y)
-	balloon.display:applyLinearImpulse( 0, -.02, balloon.display.x, balloon.display.y )
+	balloon.display:applyLinearImpulse( 0, -.22, balloon.display.x, balloon.display.y )
 
 	setmetatable( balloon, self )
 	self.__index = self
@@ -43,6 +50,12 @@ end
 
 function Balloon:update( )
 	
+	if (self.display.contentBounds.yMax < 0) then
+		self.isPastTop = true
+		self.player:balloonReachedTop(self)
+		self:kill()
+	end
+
 	-- print ("updating balloon")
 	-- means we want to remove this dead balloon from the field
 	if (self.isAlive == false and self.display ~= nil) then
