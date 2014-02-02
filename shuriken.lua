@@ -28,8 +28,38 @@ local function onLocalCollision( self, event )
 
 	end
 
+	if (event.phase == "ended" and hitClass.className == "board") then
+		print ("board collision ended")
+		hitClass.isContactingPlayer = false
+	end
+
 	return true
 end
+
+local function onLocalPreCollision( self, event )
+ 	
+	local hitClass = event.other.parentClass
+
+	if (hitClass.className == "board") then
+		if (hitClass.isOn == false) then
+			print ("shuriken can go through")
+			event.contact.isEnabled = false
+			hitClass.isContactingPlayer = true
+		end
+	end
+
+
+	print (self.parentClass.className)
+
+	print( event.contact ) --"event.contact" is the physics contact "userdata"
+	--the following properties of the collision can be accessed; the last three are settable!
+	print( event.contact.isTouching ) --read-only: are the two objects touching?
+	print( event.contact.isEnabled ) --'true' or 'false'; will the collision resolve?
+	print( event.contact.bounce ) --get/set the bounce factor of the collision
+	print( event.contact.friction ) --get/set the friction factor of the collision
+ 
+end
+
 
 function Shuriken:new( shurikenInfo )
 	shuriken = {}
@@ -39,7 +69,7 @@ function Shuriken:new( shurikenInfo )
 	shuriken.className = "shuriken"
 	shuriken.acceleration = { x = 0, y = 0 }
 
-	shuriken.display = display.newImageRect("grass.png", 50, 50)
+	shuriken.display = display.newImageRect("images/grass.png", 50, 50)
 	shuriken.display.parentClass = shuriken
 
 	physics.addBody(shuriken.display, "dynamic", { friction = 0.3, density = 1, bounce = 0.0} )
@@ -53,7 +83,10 @@ function Shuriken:new( shurikenInfo )
 	shuriken.display.isFixedRotation = true
 
 	shuriken.display.collision = onLocalCollision
+	shuriken.display.preCollision = onLocalPreCollision
+
 	shuriken.display:addEventListener( "collision", shuriken.display )
+	shuriken.display:addEventListener( "preCollision", shuriken.display )
 
 	Shuriken.group:insert( shuriken.display )
 

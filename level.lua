@@ -20,11 +20,14 @@ local screenW, screenH, halfW = display.contentWidth, display.contentHeight, dis
 local Player = require ( "player" )
 local Balloons = require ( "balloons" )
 
+local Boards = require("boards")
+
 local balloons
 
 local DeltaTime = require("deltaTime");
 
 local player
+local boards
 
 local balloonsCount = 0
 
@@ -47,6 +50,8 @@ function scene:createScene( event )
 	
 
 	player = Player:new()
+
+	boards = Boards:new({width = screenW, height = screenH})
 
 	Balloons.player = player
 
@@ -86,6 +91,7 @@ function scene:createScene( event )
 	-- all display objects must be inserted into group
 	group:insert( background )
 	group:insert( Balloons.group ) 
+	group:insert( Boards.group )
 	Player.insertShurikenGroup(group)
 	-- group:insert( grass)
 	-- group:insert( crate )
@@ -110,12 +116,13 @@ end
 local function update ( event )
 	
 	DeltaTime.updateDeltaTime()
-	print ("DT: " .. DeltaTime.deltaTime)
+	-- print ("DT: " .. DeltaTime.deltaTime)
 	--updateShuriken();
 	-- shuriken:setLinearVelocity(20, 20)
 	--updateShuriken( )
 	player:update( )
 	balloons:update( )
+	boards:update( )
 	--updateBalloons( )
 	
 	--shuriken:applyTorque( 2 )

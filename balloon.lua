@@ -11,7 +11,9 @@ function Balloon:new( balloonInfo )
 	local image = "crate.png"
 
 	if (balloon.type == "green") then
-		image = "crate.png"
+		image = "images/crate.png"
+	elseif (balloon.type == "red") then
+		image = "images/button-over.png"
 	end
 
 	balloon.player = balloonInfo.player
@@ -21,7 +23,7 @@ function Balloon:new( balloonInfo )
 	balloon.isPastTop = false
 	
 	-- 0 density so that the shuriken does not slow down when it hits the balloon
-	physics.addBody( balloon.display, "dynamic", { density = 0, friction=0, bounce = 0, filter={1} } )
+	physics.addBody( balloon.display, "dynamic", { density = 0, friction=0, bounce = 0 } )
 
 	balloon.display.gravityScale = 0
 	balloon.display.parentClass = balloon

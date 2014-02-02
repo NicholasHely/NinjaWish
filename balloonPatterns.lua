@@ -10,7 +10,7 @@ local patterns = {
 		balloonValues = 
 		{
 			[1] = { type = "green", speed = 1, position = { type = "random", x = nil, y = 0 } },
-			[2] = { type = "green", speed = 1, position = { type = "relative", x = 1, y = 0 } }
+			[2] = { type = "red", speed = 1, position = { type = "relative", x = 1, y = 0 } }
 		}
 	}
 
