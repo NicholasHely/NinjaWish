@@ -30,7 +30,8 @@ local function onLocalCollision( self, event )
 
 	if (event.phase == "ended" and hitClass.className == "board") then
 		print ("board collision ended")
-		hitClass.isContactingPlayer = false
+		hitClass:shurikenNotHitting()
+		-- hitClass.isContactingPlayer = false
 	end
 
 	return true
@@ -41,10 +42,11 @@ local function onLocalPreCollision( self, event )
 	local hitClass = event.other.parentClass
 
 	if (hitClass.className == "board") then
-		if (hitClass.isOn == false) then
+		--print (hitClass:isOn());
+		if (hitClass:isOn() == false) then
 			print ("shuriken can go through")
 			event.contact.isEnabled = false
-			hitClass.isContactingPlayer = true
+			hitClass:shurikenHitting()
 		end
 	end
 
