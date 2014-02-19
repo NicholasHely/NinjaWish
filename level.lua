@@ -31,6 +31,7 @@ local boards
 
 local balloonsCount = 0
 
+local SpriteHelper = require("util.SpriteHelper")
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
 -- 
@@ -47,7 +48,10 @@ function scene:createScene( event )
 	local background = display.newRect( 0, 0, screenW, screenH )
 	background:setFillColor( 128 )
 	
-	
+	SpriteHelper.initialize("something")
+
+	local sprite = SpriteHelper.newSprite()
+	sprite:test()
 
 	player = Player:new()
 
