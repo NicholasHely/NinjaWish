@@ -51,7 +51,7 @@ function scene:createScene( event )
 	SpriteHelper.initialize("something")
 
 	local sprite = SpriteHelper.newSprite()
-	sprite:test()
+	-- sprite:test()
 
 	player = Player:new()
 
