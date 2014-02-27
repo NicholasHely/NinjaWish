@@ -4,6 +4,7 @@ local Sprite = {}
 
 local spriteSheet
 local spriteInfo
+local spriteSet = { spriteSheets = {}, spriteInfos = {} }
 
 SpriteHelper.initialize = function ( params )
 	
@@ -11,30 +12,50 @@ SpriteHelper.initialize = function ( params )
 
 	-- local spriteData = spriteInfo:getSheet()
 	-- spriteSheet = graphics.newImageSheet( params.path.spriteImages, spriteData ) 
-
+	
 	spriteInfo = require( "images.spritesheet" )
 
 	local spriteData = spriteInfo:getSheet()
 	spriteSheet = graphics.newImageSheet( "images/spritesheet.png", spriteData )
 end
 
-SpriteHelper.newSprite = function ( params )
+SpriteHelper.getFrameIndexes = function ( frameNames )
+	
+	local frameIndexes = {}
 
+	for k, frameName in pairs(frameNames) do
+		table.insert( frameIndexs, spriteInfo:getFrameIndex(frameName) )
+	end
+
+	return frameIndexes
+
+end
+
+SpriteHelper.newSprite = function ( params )
 
 	local sprite = { };
 
+	local options = { }
+
+	print ("test " .. spriteInfo:getFrameIndex("mapBuild"))
+	print ("test2 " .. spriteInfo:getFrameIndex("mapPath"))
 	sprite.display = display.newSprite(
 			spriteSheet, 
 			{  
-			start = spriteInfo:getFrameIndex("mapBuild"), 
-			count = 2,
-			time = 500
+			frames = { 
+				spriteInfo:getFrameIndex("mapBuild"),
+				spriteInfo:getFrameIndex("mapPath") 
+			}
+			
 			})
-
+	sprite.display.x = 100
+	sprite.display.y = 100
+	sprite.display.xScale = 100
+	
 	sprite.isAlive = true
 	sprite.isFinalised = false
 
-	
+	sprite.display:play()
 
 	setmetatable( sprite, Sprite )
 	Sprite.__index = Sprite
@@ -42,20 +63,29 @@ SpriteHelper.newSprite = function ( params )
 	return sprite
 end
 
-local function finaliseSprite( sprite )
-	
+function Sprite:setDeathAnimation( frames )
+
 end
 
--- function Spirte:kill()
--- 	self.isAlive = false
+local function finaliseSprite( sprite )
+	sprite.isFinalised = true
+end
 
--- 	if (self.hasDeathAnimation == true) then
+function Sprite:remove()
+	self.display:removeSelf( )
+	self.display = nil
+end
 
--- 	else
--- 		finaliseSprite(self)
--- 	end
+function Sprite:kill()
+	self.isAlive = false
 
--- end
+	if (self.hasDeathAnimation == true) then
+
+	else
+		finaliseSprite(self)
+	end
+
+end
 
 
 
