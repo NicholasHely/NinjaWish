@@ -13,10 +13,25 @@ SpriteHelper.initialize = function ( params )
 	-- local spriteData = spriteInfo:getSheet()
 	-- spriteSheet = graphics.newImageSheet( params.path.spriteImages, spriteData ) 
 	
-	spriteInfo = require( "images.spritesheet" )
+	-- if ( params == nil ) then
+	-- 	return false
+	-- end
 
-	local spriteData = spriteInfo:getSheet()
-	spriteSheet = graphics.newImageSheet( "images/spritesheet.png", spriteData )
+
+	for k, spriteInfo in pairs( params.spriteInfos ) do
+		spriteSet.spriteInfos[k] = require( spriteInfo )
+	end
+
+	for k, spriteSheet in pairs( params.spriteSheets ) do
+		spriteSet.spriteSheets[k] = graphics.newImageSheet( spriteSheet, spriteSet.spriteInfos[k] )
+	end
+
+	-- return true
+
+	--spriteInfo = require( "images.spritesheet" )
+
+	-- local spriteData = spriteInfo:getSheet()
+	-- spriteSheet = graphics.newImageSheet( "images/spritesheet.png", spriteData )
 end
 
 SpriteHelper.getFrameIndexes = function ( frameNames )
@@ -24,7 +39,7 @@ SpriteHelper.getFrameIndexes = function ( frameNames )
 	local frameIndexes = {}
 
 	for k, frameName in pairs(frameNames) do
-		table.insert( frameIndexs, spriteInfo:getFrameIndex(frameName) )
+		table.insert( frameIndexes, spriteInfo:getFrameIndex( frameName ) )
 	end
 
 	return frameIndexes
