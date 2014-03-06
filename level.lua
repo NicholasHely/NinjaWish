@@ -31,7 +31,7 @@ local boards
 
 local balloonsCount = 0
 
-local SpriteHelper = require("util.SpriteHelper")
+local SpriteHelper = require("util.spriteHelper")
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
 -- 
@@ -44,13 +44,18 @@ local SpriteHelper = require("util.SpriteHelper")
 function scene:createScene( event )
 	local group = self.view
 
-	-- create a grey rectangle as the backdrop
+	-- create a grey rectangle as the backdrop;[]
 	local background = display.newRect( 0, 0, screenW, screenH )
 	background:setFillColor( 128 )
 	
-	SpriteHelper.initialize("something")
+	SpriteHelper.initialize( { 
+		spriteInfos = { main = "images.spritesheet" },
+		spriteSheets = { main = "images/spritesheet.png"},
+		})
 
-	local sprite = SpriteHelper.newSprite()
+	-- print ( SpriteHelper.getFrameIndexes( "test", { "mapBuild"}))
+
+	-- local sprite = SpriteHelper.newSprite()
 	-- sprite:test()
 
 	player = Player:new()

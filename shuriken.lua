@@ -6,6 +6,8 @@ Shuriken.screen = { height = display.contentHeight, width = display.contentWidth
 Shuriken.maxYSpeed = Shuriken.screen.height / 20
 Shuriken.maxXSpeed = Shuriken.screen.width / 20
 
+local SpriteHelper = require ("util.spriteHelper")
+
 local DeltaTime = require("deltaTime");
 
 local function onLocalCollision( self, event )
@@ -39,6 +41,10 @@ end
 
 local function onLocalPreCollision( self, event )
  	
+	if (event.contact == nil) then
+		return 
+	end
+
 	local hitClass = event.other.parentClass
 
 	if (hitClass.className == "board") then
@@ -71,7 +77,21 @@ function Shuriken:new( shurikenInfo )
 	shuriken.className = "shuriken"
 	shuriken.acceleration = { x = 0, y = 0 }
 
-	shuriken.display = display.newImageRect("images/grass.png", 50, 50)
+	local frames = SpriteHelper.getFrameIndexes( "main", { "mapBuild", "mapPath"})
+
+	-- shuriken.display = display.newImageRect("images/grass.png", 50, 50)
+
+	shuriken.display = display.newSprite(
+			SpriteHelper.getSheet("main"), 
+			{  
+			frames = frames,
+			time = 500
+			
+			})
+	shuriken.display:play()
+	shuriken.display.xScale = 1
+	shuriken.display.yScale = 1
+
 	shuriken.display.parentClass = shuriken
 
 	physics.addBody(shuriken.display, "dynamic", { friction = 0.3, density = 1, bounce = 0.0} )
@@ -144,6 +164,7 @@ function Shuriken:update( )
 	--print("update")
 	
 	self.display.rotation = self.display.rotation + 30
+	
 	if ( self.display.top > Shuriken.screen.height ) then
 		self.display.y = 0
 	elseif ( self.display.bottom < 0 ) then

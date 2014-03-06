@@ -23,7 +23,7 @@ SpriteHelper.initialize = function ( params )
 	end
 
 	for k, spriteSheet in pairs( params.spriteSheets ) do
-		spriteSet.spriteSheets[k] = graphics.newImageSheet( spriteSheet, spriteSet.spriteInfos[k] )
+		spriteSet.spriteSheets[k] = graphics.newImageSheet( spriteSheet, spriteSet.spriteInfos[k]:getSheet() )
 	end
 
 	-- return true
@@ -34,12 +34,18 @@ SpriteHelper.initialize = function ( params )
 	-- spriteSheet = graphics.newImageSheet( "images/spritesheet.png", spriteData )
 end
 
-SpriteHelper.getFrameIndexes = function ( frameNames )
+SpriteHelper.getSheet = function ( sheet )
 	
+	return spriteSet.spriteSheets[sheet]
+
+end
+
+SpriteHelper.getFrameIndexes = function ( spriteInfoKey, frameNames )
+
 	local frameIndexes = {}
 
 	for k, frameName in pairs(frameNames) do
-		table.insert( frameIndexes, spriteInfo:getFrameIndex( frameName ) )
+		table.insert( frameIndexes, spriteSet.spriteInfos[spriteInfoKey]:getFrameIndex( frameName ) )
 	end
 
 	return frameIndexes
@@ -60,7 +66,7 @@ SpriteHelper.newSprite = function ( params )
 			frames = { 
 				spriteInfo:getFrameIndex("mapBuild"),
 				spriteInfo:getFrameIndex("mapPath") 
-			}
+			},
 			
 			})
 	sprite.display.x = 100
