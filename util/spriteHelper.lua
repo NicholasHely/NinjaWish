@@ -52,8 +52,66 @@ SpriteHelper.getFrameIndexes = function ( spriteInfoKey, frameNames )
 
 end
 
-SpriteHelper.newSprite = function ( params )
+SpriteHelper.getScales = function ( sprites ) --sheetNames, imageNames, desiredSizes )
+	
+	local scales = {}
 
+	local spriteInfo = nil
+	local spriteName = nil
+	local spriteWidth = nil
+	local spriteHeight = nil
+
+	local actualWidth = nil
+	local actualHeight = nil
+
+	local frameNumber = nil
+
+	for k, desiredSprite in pairs( sprites ) do
+		
+		--local scale = { x = 1, y = 1 }
+
+		spriteInfo = desiredSprite.spriteInfo
+		spriteName = desiredSprite.name
+		spriteWidth = desiredSprite.width
+		spriteHeight = desiredSprite.height
+
+		spriteInfo = spriteSet.spriteInfos[spriteInfo]
+
+		frameNumber = spriteInfo:getFrameIndex( spriteName )
+
+		actualWidth = spriteInfo:getSheet().frames[frameNumber].width
+		actualHeight = spriteInfo:getSheet().frames[frameNumber].height
+
+		scales[k] = { 
+					width = spriteWidth,
+					height = spriteHeight,
+					xScale = (spriteWidth / actualWidth), 
+					yScale = (spriteHeight / actualHeight) 
+				}
+
+		--print(k,v)
+	end
+	return scales
+end
+
+local function spriteListener ( event )
+
+	
+	
+end
+
+SpriteHelper.scaleSpriteOnPlay = function ( params )
+	
+	local sprite = params.sprite
+	local scales = params.scales
+	local callback = params.callback
+
+	sprite:addEventListener( "sprite", spriteListener )
+
+end
+
+SpriteHelper.newSprite = function ( params )
+ 
 	local sprite = { };
 
 	local options = { }
