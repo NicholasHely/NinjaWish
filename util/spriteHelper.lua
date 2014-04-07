@@ -6,6 +6,8 @@ local spriteSheet
 local spriteInfo
 local spriteSet = { spriteSheets = {}, spriteInfos = {} }
 
+
+
 SpriteHelper.initialize = function ( params )
 	
 	-- spriteInfo = require( params.path.spriteInfo )
@@ -96,8 +98,8 @@ end
 
 local function spriteListener ( event )
 
-	
-	
+
+
 end
 
 SpriteHelper.scaleSpriteOnPlay = function ( params )

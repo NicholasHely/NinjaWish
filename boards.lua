@@ -72,6 +72,8 @@ function Boards:update()
 			end
 
 		end
+
+		
 		-- print(k,v)
 	end
 	

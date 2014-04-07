@@ -1,7 +1,7 @@
 --calculate the aspect ratio of the device
 local aspectRatio = display.pixelHeight / display.pixelWidth
-local height = aspectRatio < 1.5 and 1200 or math.ceil( 800 * aspectRatio )
-local width = aspectRatio > 1.5 and 800 or math.ceil( 1200 / aspectRatio )
+-- local height = aspectRatio < 1.5 and 1200 or math.ceil( 800 * aspectRatio )
+-- local width = aspectRatio > 1.5 and 800 or math.ceil( 1200 / aspectRatio )
 
 
 application = {

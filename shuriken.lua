@@ -92,6 +92,8 @@ function Shuriken:new( shurikenInfo )
 	shuriken.display.xScale = 1
 	shuriken.display.yScale = 1
 
+	print("Shuriken width" .. shuriken.display.width)
+
 	shuriken.display.parentClass = shuriken
 
 	physics.addBody(shuriken.display, "dynamic", { friction = 0.3, density = 1, bounce = 0.0} )
