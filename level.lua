@@ -20,14 +20,18 @@ local screenW, screenH, halfW = display.contentWidth, display.contentHeight, dis
 local Player = require ( "player" )
 local Balloons = require ( "balloons" )
 
+local Boards = require("boards")
+
 local balloons
 
 local DeltaTime = require("deltaTime");
 
 local player
+local boards
 
 local balloonsCount = 0
 
+local SpriteHelper = require("util.spriteHelper")
 -----------------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
 -- 
@@ -40,13 +44,23 @@ local balloonsCount = 0
 function scene:createScene( event )
 	local group = self.view
 
-	-- create a grey rectangle as the backdrop
+	-- create a grey rectangle as the backdrop;[]
 	local background = display.newRect( 0, 0, screenW, screenH )
 	background:setFillColor( 128 )
 	
-	
+	SpriteHelper.initialize( { 
+		spriteInfos = { main = "images.spritesheet" },
+		spriteSheets = { main = "images/spritesheet.png"},
+		})
+
+	-- print ( SpriteHelper.getFrameIndexes( "test", { "mapBuild"}))
+
+	-- local sprite = SpriteHelper.newSprite()
+	-- sprite:test()
 
 	player = Player:new()
+
+	boards = Boards:new({width = screenW, height = screenH})
 
 	Balloons.player = player
 
@@ -86,6 +100,7 @@ function scene:createScene( event )
 	-- all display objects must be inserted into group
 	group:insert( background )
 	group:insert( Balloons.group ) 
+	group:insert( Boards.group )
 	Player.insertShurikenGroup(group)
 	-- group:insert( grass)
 	-- group:insert( crate )
@@ -110,12 +125,13 @@ end
 local function update ( event )
 	
 	DeltaTime.updateDeltaTime()
-	print ("DT: " .. DeltaTime.deltaTime)
+	-- print ("DT: " .. DeltaTime.deltaTime)
 	--updateShuriken();
 	-- shuriken:setLinearVelocity(20, 20)
 	--updateShuriken( )
 	player:update( )
 	balloons:update( )
+	boards:update( )
 	--updateBalloons( )
 	
 	--shuriken:applyTorque( 2 )
@@ -180,7 +196,7 @@ local function onKeyEvent( event )
     -- Print which key was pressed down/up to the log.
     local message = "Key '" .. event.keyName .. "' was pressed " .. event.phase
     print( message )
-    shuriken:handleEvent( event )
+    player.shuriken:handleEvent( event )
     -- If the "back" key was pressed on Android, then prevent it from backing out of your app.
     
 end

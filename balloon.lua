@@ -1,5 +1,8 @@
 local Balloon = {}
 
+local LevelInfo = require("util.levelInfo")
+local DeltaTime = require("deltaTime");
+
 function Balloon:new( balloonInfo )
 	local balloon = {}
 	
@@ -11,9 +14,12 @@ function Balloon:new( balloonInfo )
 	local image = "crate.png"
 
 	if (balloon.type == "green") then
-		image = "crate.png"
+		image = "images/crate.png"
+	elseif (balloon.type == "red") then
+		image = "images/button-over.png"
 	end
 
+	balloon.speed = balloonInfo.speed
 	balloon.player = balloonInfo.player
 	balloon.display = display.newImageRect( image, balloonInfo.size, balloonInfo.size )
 	balloon.display.x = balloonInfo.position.x
@@ -21,7 +27,7 @@ function Balloon:new( balloonInfo )
 	balloon.isPastTop = false
 	
 	-- 0 density so that the shuriken does not slow down when it hits the balloon
-	physics.addBody( balloon.display, "dynamic", { density = 0, friction=0, bounce = 0, filter={1} } )
+	physics.addBody( balloon.display, "dynamic", { density = 0, friction=0, bounce = 0 } )
 
 	balloon.display.gravityScale = 0
 	balloon.display.parentClass = balloon
@@ -32,7 +38,7 @@ function Balloon:new( balloonInfo )
 	balloon.isFinalised = false
 
 	--balloon.display:applyForce( 0, -.02, balloon.display.x, balloon.display.y)
-	balloon.display:applyLinearImpulse( 0, -.22, balloon.display.x, balloon.display.y )
+	-- balloon.display:applyLinearImpulse( 0, -.22, balloon.display.x, balloon.display.y )
 
 	setmetatable( balloon, self )
 	self.__index = self
@@ -50,11 +56,13 @@ end
 
 function Balloon:update( )
 	
-	if (self.display.contentBounds.yMax < 0) then
+	if (self.display.contentBounds.yMax < LevelInfo.dimensions.top) then
 		self.isPastTop = true
 		self.player:balloonReachedTop(self)
 		self:kill()
 	end
+
+	self.display:translate(0, self.speed * DeltaTime.deltaTime)
 
 	-- print ("updating balloon")
 	-- means we want to remove this dead balloon from the field

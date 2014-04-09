@@ -1,12 +1,16 @@
+local SpriteHelper = require ("util.spriteHelper")
 
+local DeltaTime = require("deltaTime");
+local LevelInfo = require("util.levelInfo")
 
 local Shuriken = {}
 Shuriken.group = display.newGroup( )
 Shuriken.screen = { height = display.contentHeight, width = display.contentWidth }
-Shuriken.maxYSpeed = Shuriken.screen.height / 20
-Shuriken.maxXSpeed = Shuriken.screen.width / 20
+Shuriken.maxYSpeed = LevelInfo.dimensions.height / 20
+Shuriken.maxXSpeed = LevelInfo.dimensions.width / 20
 
-local DeltaTime = require("deltaTime");
+
+
 
 local function onLocalCollision( self, event )
 
@@ -28,18 +32,70 @@ local function onLocalCollision( self, event )
 
 	end
 
+	if (event.phase == "ended" and hitClass.className == "board") then
+		print ("board collision ended")
+		hitClass:shurikenNotHitting()
+		-- hitClass.isContactingPlayer = false
+	end
+
 	return true
 end
 
+local function onLocalPreCollision( self, event )
+ 	
+	if (event.contact == nil) then
+		return 
+	end
+
+	local hitClass = event.other.parentClass
+
+	if (hitClass.className == "board") then
+		--print (hitClass:isOn());
+		if (hitClass:isOn() == false) then
+			print ("shuriken can go through")
+			event.contact.isEnabled = false
+			hitClass:shurikenHitting()
+		end
+	end
+
+
+	print (self.parentClass.className)
+
+	print( event.contact ) --"event.contact" is the physics contact "userdata"
+	--the following properties of the collision can be accessed; the last three are settable!
+	print( event.contact.isTouching ) --read-only: are the two objects touching?
+	print( event.contact.isEnabled ) --'true' or 'false'; will the collision resolve?
+	print( event.contact.bounce ) --get/set the bounce factor of the collision
+	print( event.contact.friction ) --get/set the friction factor of the collision
+ 
+end
+
+
 function Shuriken:new( shurikenInfo )
-	shuriken = {}
+	local shuriken = {}
 	print ("play")
 	print (shurikenInfo.player)
 	shuriken.player = shurikenInfo.player
 	shuriken.className = "shuriken"
 	shuriken.acceleration = { x = 0, y = 0 }
 
-	shuriken.display = display.newImageRect("grass.png", 50, 50)
+	local frames = SpriteHelper.getFrameIndexes( "main", { "mapBuild", "mapPath"})
+
+	-- shuriken.display = display.newImageRect("images/grass.png", 50, 50)
+
+	shuriken.display = display.newSprite(
+			SpriteHelper.getSheet("main"), 
+			{  
+			frames = frames,
+			time = 500
+			
+			})
+	shuriken.display:play()
+	shuriken.display.xScale = 1
+	shuriken.display.yScale = 1
+
+	print("Shuriken width" .. shuriken.display.width)
+
 	shuriken.display.parentClass = shuriken
 
 	physics.addBody(shuriken.display, "dynamic", { friction = 0.3, density = 1, bounce = 0.0} )
@@ -53,7 +109,10 @@ function Shuriken:new( shurikenInfo )
 	shuriken.display.isFixedRotation = true
 
 	shuriken.display.collision = onLocalCollision
+	shuriken.display.preCollision = onLocalPreCollision
+
 	shuriken.display:addEventListener( "collision", shuriken.display )
+	shuriken.display:addEventListener( "preCollision", shuriken.display )
 
 	Shuriken.group:insert( shuriken.display )
 
@@ -109,16 +168,17 @@ function Shuriken:update( )
 	--print("update")
 	
 	self.display.rotation = self.display.rotation + 30
-	if ( self.display.top > Shuriken.screen.height ) then
-		self.display.y = 0
-	elseif ( self.display.bottom < 0 ) then
-		self.display.y = Shuriken.screen.height
+	
+	if ( self.display.top > LevelInfo.dimensions.bottom ) then
+		self.display.y = LevelInfo.dimensions.top
+	elseif ( self.display.bottom < LevelInfo.dimensions.top ) then
+		self.display.y = LevelInfo.dimensions.bottom
 	end
 	
-	if ( self.display.left > Shuriken.screen.width ) then
-		self.display.x = 0
-	elseif ( self.display.right < 0 ) then
-		self.display.x = Shuriken.screen.width
+	if ( self.display.left > LevelInfo.dimensions.right ) then
+		self.display.x = LevelInfo.dimensions.left
+	elseif ( self.display.right < LevelInfo.dimensions.left ) then
+		self.display.x = LevelInfo.dimensions.right
 	end
 end
 
