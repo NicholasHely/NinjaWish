@@ -1,13 +1,20 @@
 require ("balloonPatterns")
 
 local Balloon = require( "balloon" )
+local LevelInfo = require("util.levelInfo")
+
 local Balloons = {}
+		
 
 Balloons.screen = { width = display.contentWidth, height = display.contentHeight}
 Balloons.balloonsAcross = 15
-Balloons.size = display.contentWidth / Balloons.balloonsAcross
+Balloons.size = LevelInfo.dimensions.width / Balloons.balloonsAcross
 Balloons.group = display.newGroup( )
 Balloon.group = Balloons.group
+
+-- values that determine how far right and left a balloon can be
+local rightMost = (LevelInfo.dimensions.right - Balloons.size * .5)
+local leftMost = LevelInfo.dimensions.left + (Balloons.size * .5)	
 
 print ("Display size" .. display.contentWidth)
 
@@ -122,7 +129,8 @@ function Balloons:createBalloons( pattern )
 			 player = Balloons.player,
 			 type = balloonType, 
 			 size = Balloons.size, 
-			 position = balloonAbsolutePosition 
+			 position = balloonAbsolutePosition,
+			 speed = -1
 			})
 		table.insert( self.currentBalloons, balloon )
 		-- if (balloonPosition.type == "fixed") then
@@ -145,21 +153,21 @@ end
 function Balloons:getBalloonPosition( startingBalloonPosition, width, position )
 
 	local initialX = 0;
-	local initialY = Balloons.screen.height
+	local initialY = LevelInfo.dimensions.bottom
 	
 	if (position.type == "random") then
-		initialX = math.random( ) * Balloons.screen.width
+		initialX = math.random( ) * LevelInfo.dimensions.width + LevelInfo.dimensions.left
 	elseif (position.type == "fixed") then
 		initialX = Balloons.screen.width * leftMostBalloon.position.x
 	elseif (position.type == "relative") then
 		initialX = startingBalloonPosition.x + (position.x * Balloons.size)
 	end
+	local leftMostBalloonRightMost = rightMost - (Balloons.size * width)
 
-	local rightMost = (Balloons.screen.width - Balloons.size * .5) - (Balloons.size * width)
-	if (initialX < Balloons.size * .5) then
-		initialX = Balloons.size * .5
-	elseif (initialX > rightMost) then
-		initialX = rightMost
+	if (initialX < leftMost) then
+		initialX = leftMost
+	elseif (initialX > leftMostBalloonRightMost) then
+		initialX = leftMostBalloonRightMost
 	end
 	print (position.x)
 	initialY = initialY + (position.y * Balloons.size)

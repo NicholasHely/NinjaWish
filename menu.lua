@@ -53,12 +53,12 @@ function scene:createScene( event )
 		labelColor = { default={255}, over={128} },
 		defaultFile="images/button.png",
 		overFile="images/button-over.png",
-		width=154, height=40,
+		width=100, height=40,
 		onRelease = onPlayBtnRelease	-- event listener function
 	}
 	-- playBtn:setReferencePoint( display.CenterReferencePoint )
-	playBtn.x = display.contentWidth*0.5
-	playBtn.y = display.contentHeight - 125
+	playBtn.x = 40
+	playBtn.y = 40
 	
 	-- all display objects must be inserted into group
 	group:insert( background )

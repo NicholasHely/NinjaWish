@@ -196,7 +196,7 @@ local function onKeyEvent( event )
     -- Print which key was pressed down/up to the log.
     local message = "Key '" .. event.keyName .. "' was pressed " .. event.phase
     print( message )
-    shuriken:handleEvent( event )
+    player.shuriken:handleEvent( event )
     -- If the "back" key was pressed on Android, then prevent it from backing out of your app.
     
 end
