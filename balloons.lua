@@ -18,10 +18,29 @@ local leftMost = LevelInfo.dimensions.left + (Balloons.size * .5)
 
 print ("Display size" .. display.contentWidth)
 
+local function newSpeed( balloons )
+
+	balloons.currentSpeed = balloons.currentSpeed + balloons.speedChangePerInterval
+	print ("Adjusting speed")
+	if (balloons.currentSpeed < LevelInfo.speeds.balloon.endY) then
+		balloons.currentSpeed = LevelInfo.speeds.balloon.endY
+	end
+end
+
 function Balloons:new( )
 	local balloons = {}
 	balloons.currentBalloons = { }
 	balloons.balloonSize = Balloons.screen.width / Balloons.balloonsAcross
+	balloons.currentSpeed = LevelInfo.speeds.balloon.startY
+
+	local numberOfSpeedChanges = 100
+	balloons.speedChangePerInterval = (LevelInfo.speeds.balloon.endY - LevelInfo.speeds.balloon.startY) 
+		/ numberOfSpeedChanges
+	balloons.speedTimer = timer.performWithDelay( 2000, 
+		function (event) 
+			newSpeed(balloons)
+		end, 
+		numberOfSpeedChanges)
 
 	setmetatable( balloons, self )
 	self.__index = self
@@ -130,7 +149,7 @@ function Balloons:createBalloons( pattern )
 			 type = balloonType, 
 			 size = Balloons.size, 
 			 position = balloonAbsolutePosition,
-			 speed = -1
+			 speed = self.currentSpeed
 			})
 		table.insert( self.currentBalloons, balloon )
 		-- if (balloonPosition.type == "fixed") then

@@ -16,16 +16,16 @@ settings = {
 
             --[[
             -- iOS app URL schemes:
-            CFBundleURLTypes =
-            {
-                {
-                    CFBundleURLSchemes =
-                    {
-                        "fbXXXXXXXXXXXXXX", -- example scheme for facebook
-                        "coronasdkapp", -- example second scheme
-                    }
-                }
-            }
+            -- CFBundleURLTypes =
+            -- {
+            --    {
+            --        CFBundleURLSchemes =
+            --        {
+            --            "fbXXXXXXXXXXXXXX", -- example scheme for facebook
+            --            "coronasdkapp", -- example second scheme
+            --        }
+            --    }
+            --}
             --]]
 		}
 	},

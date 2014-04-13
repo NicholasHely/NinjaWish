@@ -6,8 +6,8 @@ local LevelInfo = require("util.levelInfo")
 local Shuriken = {}
 Shuriken.group = display.newGroup( )
 Shuriken.screen = { height = display.contentHeight, width = display.contentWidth }
-Shuriken.maxYSpeed = LevelInfo.dimensions.height / 20
-Shuriken.maxXSpeed = LevelInfo.dimensions.width / 20
+Shuriken.maxYSpeed = LevelInfo.speeds.shuriken.maxY
+Shuriken.maxXSpeed = LevelInfo.speeds.shuriken.maxX
 
 
 
@@ -136,17 +136,31 @@ end
 function Shuriken:handleEvent ( event )
 
 	if (event.keyName == "w") then
-    	self.display:applyLinearImpulse( 0, -4 )
-        return true
+
+    	-- self.display:applyLinearImpulse( 0, -4 )
+        self.acceleration.y = self.acceleration.y - 4
     elseif (event.keyName == "s") then
-		self.display:applyLinearImpulse( 0, 4 )
-    	return true
+		-- self.display:applyLinearImpulse( 0, 4 )
+    	self.acceleration.y = self.acceleration.y + 4
     elseif (event.keyName == "a") then
-		self.display:applyLinearImpulse( -4, 0 )
-    	return true
+    	self.acceleration.x = self.acceleration.x - 4
+		-- self.display:applyLinearImpulse( -4, 0 )
+    	
     elseif (event.keyName == "d") then
-		self.display:applyLinearImpulse( 4, 0 )
-    	return true
+    	self.acceleration.x = self.acceleration.x + 4
+		-- self.display:applyLinearImpulse( 4, 0 )
+    	
+    end
+
+    if (self.acceleration.x > Shuriken.maxXSpeed) then
+		self.acceleration.x = Shuriken.maxXSpeed
+    end
+     if (self.acceleration.x < -Shuriken.maxXSpeed) then
+		self.acceleration.x = -Shuriken.maxXSpeed
+    end
+
+    if (self.acceleration.y < -Shuriken.maxYSpeed) then
+		self.acceleration.y = -Shuriken.maxYSpeed
     end
 
     -- Return false to indicate that this app is *not* overriding the received key.

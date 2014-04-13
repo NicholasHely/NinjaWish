@@ -13,8 +13,29 @@ local dimensions = {
 	height = height
 }
 
+local shurikenTimeAcrossScreen = 40
+local balloonMaxTimeAcrossScreen = 120
+local balloonStartTimeAcrossScreen = 400
+
+local speeds = {
+	shuriken = { maxY = dimensions.height / shurikenTimeAcrossScreen,
+		maxX = dimensions.width / shurikenTimeAcrossScreen},
+	balloon = {
+		startY = -(dimensions.height / balloonStartTimeAcrossScreen),
+		endY = -(dimensions.height / balloonMaxTimeAcrossScreen)
+	} 
+
+}
+
+
+
 local levelInfo = {}
 
 levelInfo.dimensions = dimensions
+levelInfo.speeds = speeds
+
+function levelInfo:calculateSpeed( timeAcrossScreen )
+	return levelInfo
+end
 
 return levelInfo
