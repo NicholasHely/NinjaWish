@@ -9,6 +9,7 @@ local Balloons = {}
 Balloons.screen = { width = display.contentWidth, height = display.contentHeight}
 Balloons.balloonsAcross = 15
 Balloons.size = LevelInfo.dimensions.width / Balloons.balloonsAcross
+Balloons.nextSpawnY = LevelInfo.dimensions.bottom - (Balloons.size * 2.5)
 Balloons.group = display.newGroup( )
 Balloon.group = Balloons.group
 
@@ -30,6 +31,7 @@ end
 function Balloons:new( )
 	local balloons = {}
 	balloons.currentBalloons = { }
+	balloons.count = 0
 	balloons.balloonSize = Balloons.screen.width / Balloons.balloonsAcross
 	balloons.currentSpeed = LevelInfo.speeds.balloon.startY
 
@@ -50,11 +52,23 @@ function Balloons:new( )
 	return balloons
 end
 
+local function isSpawnable( balloons )
+
+	for k, balloon in pairs( balloons ) do
+		if ( balloon.display.y > Balloons.nextSpawnY ) then
+			return false
+		end
+	end
+	return true
+
+end
+
 
 function Balloons:checkBalloons()
 
-	local balloonPattern = math.random(1)
-	if (self.currentBalloons[1] == nil) then
+	
+	if (self.count == 0 or isSpawnable(self.currentBalloons)) then
+		local balloonPattern = math.random(1)
 		self:createBalloons(getPattern(balloonPattern))
 	end
 	
@@ -79,6 +93,7 @@ function Balloons:update( )
 		-- remove the balloon from the list if it
 		-- is finished
 		if (balloon.isFinalised == true) then
+			self.count = self.count - 1
 			self.currentBalloons[k] = nil
 		end
 	end
@@ -152,6 +167,8 @@ function Balloons:createBalloons( pattern )
 			 speed = self.currentSpeed
 			})
 		table.insert( self.currentBalloons, balloon )
+		self.count = self.count + 1
+
 		-- if (balloonPosition.type == "fixed") then
 		-- 	balloonX = balloonPosition.x * Balloons.screen.width
 		-- else
