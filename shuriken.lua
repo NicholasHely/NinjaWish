@@ -32,9 +32,26 @@ local function onLocalCollision( self, event )
 
 	end
 
-	if (event.phase == "ended" and hitClass.className == "board") then
-		print ("board collision ended")
-		hitClass:shurikenNotHitting()
+	
+
+	if (hitClass.className == "board") then
+
+		if ( hitClass:isOn() ) then
+
+			if (event.phase == "began") then
+				self.parentClass.isHittingBoard = true
+				self.parentClass.acceleration.x = 0
+				self.parentClass.acceleration.y = 0
+			end
+			
+		end
+
+		if (event.phase == "ended") then
+			print ("board collision ended")
+			self.parentClass.isHittingBoard = false
+			hitClass:shurikenNotHitting()
+		end
+		
 		-- hitClass.isContactingPlayer = false
 	end
 
@@ -171,7 +188,11 @@ end
 
 function Shuriken:update( )
 
-	self.display:translate( self.acceleration.x * DeltaTime.deltaTime, self.acceleration.y * DeltaTime.deltaTime)
+	if (not self.isHittingBoard) then
+		self.display:translate( self.acceleration.x * DeltaTime.deltaTime, self.acceleration.y * DeltaTime.deltaTime)
+	end
+
+	
 
 	self.display.top = self.display.y - self.display.halfH
 	self.display.right = self.display.x + self.display.halfW

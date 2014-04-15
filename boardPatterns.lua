@@ -10,8 +10,10 @@ local patterns = {
 		pattern = 
 		{
 			[1] = { 
-				blocks = 10,
-				initialPosition = { xStart = 50, yStart = 25, xEnd = 100, yEnd = 80, width = .05 },
+				x = 500, y = 75, height = 20, width = 20, rotation = 0
+				},
+			[2] = { 
+				x = 100, y = 100, height = 20, width = 20, rotation = 10 
 				},
 			
 		}

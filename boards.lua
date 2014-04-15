@@ -1,6 +1,7 @@
 local Boards = {}
 local Board = require("board")
 local Patterns = require ("boardPatterns")
+local LevelInfo = require ( "util.levelInfo" )
 
 Boards.group = display.newGroup( )
 Boards.timing = { warning = 2000, lifetime = 10000 }
@@ -91,11 +92,19 @@ function Boards:createBoards()
 
 	group.boards = {  }
 
-	local board = self:createBoard( { boardGroup = group } )
-	
-	table.insert(group.boards, board)
-	group.displayGroup:insert(board.display)
+	local pattern = boardPattern.pattern
 
+	for k, boardInfo in pairs(pattern) do
+		local board = self:createBoard( { boardGroup = group,
+			x = boardInfo.x + LevelInfo.dimensions.left,
+			y = boardInfo.y + LevelInfo.dimensions.top,
+			rotation = boardInfo.rotation
+		 } )
+		table.insert(group.boards, board)
+		group.displayGroup:insert(board.display)
+
+	end
+	
 	group.timing = { warning = boardPattern.info.warningTime, lifetime = boardPattern.info.lifetime }
 
 	group.isWarningOver = false
@@ -119,8 +128,9 @@ function Boards:createBoard( params )
 	local board = Board:new( { 
 		boardGroup = params.boardGroup,
 		time = { warning = 1000, lifetime = 10000},
-		x = 100,
-		y = 100
+		x = params.x,
+		y = params.y,
+		rotation = params.rotation
 	}) --display.newImage( "board.png", position.x ,position.y)
 	return board
 	-- self.currentBoards[1] = board

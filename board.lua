@@ -26,6 +26,7 @@ function Board:new( params )
 	physics.addBody(board.display, "static", { friction = 0.3, density = 1, bounce = 0.2} )
 
 	board.display.gravityScale = 0
+	board.display.rotation = params.rotation
 
 	setmetatable( board, self )
 	self.__index = self
