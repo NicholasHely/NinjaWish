@@ -24,10 +24,7 @@ local speeds = {
 		startY = -(dimensions.height / balloonStartTimeAcrossScreen),
 		endY = -(dimensions.height / balloonMaxTimeAcrossScreen)
 	} 
-
 }
-
-
 
 local levelInfo = {}
 
