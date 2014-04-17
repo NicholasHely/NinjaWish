@@ -127,7 +127,7 @@ function Boards:createBoard( params )
 
 	local board = Board:new( { 
 		boardGroup = params.boardGroup,
-		time = { warning = 1000, lifetime = 10000},
+		--time = { warning = 1000, lifetime = 10000},
 		x = params.x,
 		y = params.y,
 		rotation = params.rotation
